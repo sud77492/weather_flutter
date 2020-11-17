@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_flutter/model/weather_forecast_model.dart';
+import 'package:weather_flutter/ui/bottom_view.dart';
 
 import 'network/network.dart';
 import 'ui/mid_view.dart';
@@ -36,7 +37,8 @@ class _WeatherForecastState extends State<WeatherForecast> {
                   if(snapshot.hasData){
                     return Column(
                       children: <Widget>[
-                        midView(snapshot),
+                        MidView(snapshot: snapshot,),
+                        BottomView(snapshot: snapshot,)
                       ]
                     );
                   }else{
@@ -53,22 +55,25 @@ class _WeatherForecastState extends State<WeatherForecast> {
   }
 
   Widget textFieldView() {
-    return Container(
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: "Enter City Name",
-          prefixIcon: Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10)
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: "Enter City Name",
+            prefixIcon: Icon(Icons.search),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10)
+            ),
+              contentPadding: EdgeInsets.all(8)
           ),
-            contentPadding: EdgeInsets.all(8)
+          onSubmitted: (value){
+            setState(() {
+              _cityName = value;
+              forecastObject = getWeather(cityName: _cityName);
+            });
+          },
         ),
-        onSubmitted: (value){
-          setState(() {
-            _cityName = value;
-            forecastObject = getWeather(cityName: _cityName);
-          });
-        },
       ),
     );
   }
